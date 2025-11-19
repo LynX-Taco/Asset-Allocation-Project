@@ -2,7 +2,7 @@ import argparse
 from src.portfolio_pipeline import run_portfolio_pipeline
 
 # defaults (edit if you like)
-TICKERS = ['AES','LNT','AEE','AEP','AWK','APD','ALB','AMCR','AVY','BALL','ALL','AON','CPAY','EG','IVZ']
+TICKERS = ["COST","KO","TGT","WMT","PEP","XOM","TSLA","CVX","PSX","SOB","SLB","HON","GE","CAT","LMT","FDX"]
 START = '2022-01-01'
 END   = '2024-01-01'
 
