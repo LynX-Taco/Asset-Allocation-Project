@@ -1,0 +1,15 @@
+# Content outputs
+
+Use this file to record output from running the project code. Add a new section for each run with:
+- Date/time of the run.
+- Command executed and key parameters.
+- Brief summary of stdout/stderr or generated artifacts.
+- Notes about any issues encountered.
+
+Example entry:
+```
+## 2024-05-12 - Portfolio optimization
+Command: python "Portfolio Pipeline/main.py" --tickers "AAPL MSFT" --start-date 2022-01-01 --end-date 2024-01-01 --ipopt-path ./bin/ipopt
+Output: Saved plots to ./outputs/efficient_frontier.png; allocations logged to ./outputs/allocation.csv
+Notes: IPOPT warned about max iterations; try increasing iteration limit if re-running.
+```
