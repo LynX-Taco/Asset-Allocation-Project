@@ -1,10 +1,11 @@
 # Asset Allocation Project
 
-This project explores strategies for building and evaluating diversified investment portfolios as part of a BDM (Business Data Management) initiative. The goal is to apply data-driven methods to allocate assets efficiently, balance risk and return, and communicate findings clearly to stakeholders.
+This project develops a transparent, data-driven framework for constructing diversified investment portfolios for the BDM (Business Data Management) program. The repository will house research, code, and documentation that demonstrate how to source data, build allocation models, and explain results in a way that decision-makers can trust.
 
 ## Objectives
-- Define portfolio objectives and constraints that align with investor profiles and risk tolerance.
-- Collect, clean, and integrate market and alternative datasets for asset analysis.
-- Apply quantitative techniques (e.g., mean-variance optimization, factor models, scenario analysis) to construct diversified portfolios.
-- Evaluate performance using backtesting, risk metrics, and stress testing to validate robustness.
-- Visualize results and document insights to support decision-making and future iterations.
+- **Clarify investment goals and constraints**: Document investor profiles, target returns, risk budgets, liquidity needs, and any compliance rules that shape portfolio design.
+- **Build robust datasets**: Collect market, factor, macroeconomic, and alternative data; standardize formats; and create reproducible cleaning pipelines.
+- **Design allocation methodologies**: Prototype approaches such as mean-variance optimization, factor tilts, risk parity, and scenario-aware stress cases to balance risk and return.
+- **Validate performance and risk**: Backtest strategies, track drawdowns and downside risk, and run stress tests to evaluate resilience under varied market regimes.
+- **Communicate insights**: Visualize portfolio composition and outcomes, summarize trade-offs, and package findings so BDM stakeholders can make informed decisions.
+- **Ensure reproducibility**: Maintain clear versioning, parameter tracking, and documentation so analyses can be rerun and audited end-to-end.
