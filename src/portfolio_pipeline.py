@@ -201,6 +201,9 @@ def optimize_and_plot_portfolio(df_returns, ipopt_executable):
     plt.xlabel("Portfolio Risk (Variance)")
     plt.ylabel("Expected Return")
     plt.grid(True)
+    plt.tight_layout()
+    # 🔽 Save + show
+    plt.savefig("efficient_frontier.png", dpi=300, bbox_inches="tight")
     plt.show()
 
     # Allocations DataFrame
@@ -224,9 +227,12 @@ def optimize_and_plot_portfolio(df_returns, ipopt_executable):
     plt.legend(title="Asset", bbox_to_anchor=(1.05, 1), loc="upper left")
     plt.grid(True)
     plt.tight_layout()
+    # 🔽 Save + show
+    plt.savefig("allocation_vs_risk.png", dpi=300, bbox_inches="tight")
     plt.show()
 
     print("Portfolio optimization and plotting complete.")
+    print("Saved plots as 'efficient_frontier.png' and 'allocation_vs_risk.png'.")
     return df_results, df_allocations
 
 
