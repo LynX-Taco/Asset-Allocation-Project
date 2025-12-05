@@ -259,12 +259,12 @@ print("Defined `perform_full_portfolio_analysis` function.")
 # ------------------------------------------------------------
 # Wrapper used by main.py (for CLI-style usage)
 # ------------------------------------------------------------
-def run_portfolio_pipeline(ipopt_path, start_date, end_date, tickers):
+def run_portfolio_pipeline(ipopt_executable, start_date, end_date, tickers):
     """
     Entry point for main.py.
 
     Args:
-        ipopt_path (str): Path to ipopt executable (e.g., /content/bin/ipopt)
+        ipopt_executable (str): Path to ipopt executable (e.g., /content/bin/ipopt)
         start_date (str): 'YYYY-MM-DD'
         end_date (str): 'YYYY-MM-DD'
         tickers (str or list): e.g. "AAPL MSFT NVDA" or ["AAPL","MSFT","NVDA"]
@@ -279,7 +279,7 @@ def run_portfolio_pipeline(ipopt_path, start_date, end_date, tickers):
         tickers_list_local = list(tickers)
 
     df_results, df_allocations = perform_full_portfolio_analysis(
-        tickers_list_local, start_date, end_date, ipopt_path
+        tickers_list_local, start_date, end_date, ipopt_executable
     )
 
     if df_results is not None and df_allocations is not None:
