@@ -10,8 +10,8 @@ The runnable code now lives in the **Portfolio Pipeline** folder, which includes
 ## Quick start (local)
 1) **Clone and enter the repo**
 ```bash
-git clone https://github.com/your-username/asset-allocation-project.git
-cd asset-allocation-project
+!git clone https://github.com/your-username/asset-allocation-project.git
+!cd asset-allocation-project
 ```
 2) **Install dependencies**
 ```bash
