@@ -5,3 +5,4 @@ seaborn
 yfinance
 pyomo
 idaes-pse
+scipy
