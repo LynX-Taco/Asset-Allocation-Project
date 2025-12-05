@@ -15,12 +15,12 @@ The runnable code now lives in the **Portfolio Pipeline** folder, which includes
 ```
 2) **Install dependencies**
 ```bash
-python -m pip install -r "Portfolio Pipeline/requirements.txt"
+!pip install -r "Portfolio Pipeline/requirements.txt"
 ```
 
 3) **Get IPOPT via IDAES** (installs the solver to `./bin`)
 ```bash
-python -m idaes get-extensions --to ./bin
+!idaes get-extensions --to ./bin
 ```
 
 4) **Run with your own tickers**
