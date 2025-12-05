@@ -7,7 +7,7 @@ The runnable code now lives in the **Portfolio Pipeline** folder, which includes
 - `requirements.txt`: Python dependencies (Pyomo, idaes-pse, yfinance, etc.).
 - `.gitignore`: Local artifacts to keep out of version control.
 
-## Quick start (local)
+## Colab File Path
 1) **Clone and enter the repo**
 ```bash
 !git clone https://github.com/your-username/Asset-Allocation-Project.git
@@ -50,14 +50,3 @@ display(Image(f"{base_path}/efficient_frontier.png"))
 display(Image(f"{base_path}/allocation_vs_risk.png"))
 ```
 
-## Running in Google Colab
-1) Upload or clone the repo inside Colab.
-2) Install dependencies and IPOPT (goes to `/content/bin` by default):
-```python
-!pip install -r "Portfolio Pipeline/requirements.txt"
-!python -m idaes get-extensions --to /content/bin
-```
-3) Point the CLI to the IPOPT binary:
-```python
-!python "Portfolio Pipeline/main.py" --tickers GE KO NVDA --start-date 2020-01-01 --end-date 2024-01-01 --ipopt-path /content/bin/ipopt
-```
