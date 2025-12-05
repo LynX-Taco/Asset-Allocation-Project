@@ -221,6 +221,5 @@ if final_df_results is not None and final_df_allocations is not None:
 else:
     print("Portfolio analysis did not produce results.")
 
-%matplotlib inline
 import matplotlib
 matplotlib.use('module://matplotlib_inline.backend_inline')
