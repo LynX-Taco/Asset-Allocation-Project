@@ -10,23 +10,44 @@ The runnable code now lives in the **Portfolio Pipeline** folder, which includes
 ## Quick start (local)
 1) **Clone and enter the repo**
 ```bash
-!git clone https://github.com/your-username/asset-allocation-project.git
-!cd asset-allocation-project
+!git clone https://github.com/your-username/Asset-Allocation-Project.git
+%cd Asset-Allocation-Project
+!ls
 ```
 2) **Install dependencies**
 ```bash
-!pip install -r "Portfolio Pipeline/requirements.txt"
+!pip install -r requirements.txt
+!pip install idaes-pse
 ```
 
 3) **Get IPOPT via IDAES** (installs the solver to `./bin`)
 ```bash
-!idaes get-extensions --to ./bin
+!idaes get-extensions --to /content/bin
+!ls /content/bin
+
 ```
 
 4) **Run with your own tickers**
 ```bash
 TICKERS="AAPL MSFT NVDA AMZN GOOGL"
-python "Portfolio Pipeline/main.py" --ipopt-path ./bin/ipopt --start-date 2022-01-01 --end-date 2024-01-01 --tickers "${TICKERS}"
+
+!python3 main.py \
+    --ipopt /content/bin/ipopt \
+    --start 2022-01-01 \
+    --end 2024-01-01 \
+    --tickers $TICKERS
+
+```
+5) **Printing the Plots**
+```bash
+   from IPython.display import Image, display
+
+# Adjust path if needed, but this should be correct:
+
+base_path = "/content/Asset-Allocation-Project"
+
+display(Image(f"{base_path}/efficient_frontier.png"))
+display(Image(f"{base_path}/allocation_vs_risk.png"))
 ```
 
 ## Running in Google Colab
