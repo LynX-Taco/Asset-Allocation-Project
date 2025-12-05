@@ -25,6 +25,5 @@ if __name__ == "__main__":
     print("\nMonthly returns:", mret.shape)
     print(frontier.head())
     print(allocs.head())
-%matplotlib inline
 import matplotlib
 matplotlib.use('module://matplotlib_inline.backend_inline')
