@@ -98,7 +98,7 @@ def optimize_and_plot_portfolio(df_returns, ipopt_executable):
     trace out the efficient frontier for a range of risk levels, and plot:
       1) Efficient Frontier
       2) Asset Allocation vs Risk
-    Returns: df_results, df_allocations
+    Returns: (df_results, df_allocations)
     """
     # Build model
     m = ConcreteModel()
@@ -145,7 +145,7 @@ def optimize_and_plot_portfolio(df_returns, ipopt_executable):
     max_risk_for_range = max_possible_variance * 1.5
     min_risk_for_range = 1e-6
 
-    # Use fewer points if you want less noise (e.g., 51 instead of 201)
+    # Use fewer points if you want less noise (e.g., 51–101 instead of 201)
     risk_limits = np.linspace(min_risk_for_range, max_risk_for_range, 101)
 
     param_analysis = {}
@@ -242,15 +242,22 @@ def perform_full_portfolio_analysis(tickers_list, start_date, end_date, ipopt_ex
       1) Download prices
       2) Compute monthly returns
       3) Optimize and plot frontier + allocations
+
+    Returns:
+        df_returns, df_results, df_allocations
     """
     print("Starting full portfolio analysis...")
 
     df_returns = calculate_monthly_returns(tickers_list, start_date, end_date)
     if df_returns is None or df_returns.empty:
         print("No valid return data; aborting analysis.")
-        return None, None
+        return None, None, None
 
-    return optimize_and_plot_portfolio(df_returns, ipopt_executable)
+    df_results, df_allocations = optimize_and_plot_portfolio(
+        df_returns, ipopt_executable
+    )
+
+    return df_returns, df_results, df_allocations
 
 
 print("Defined `perform_full_portfolio_analysis` function.")
@@ -270,7 +277,9 @@ def run_portfolio_pipeline(ipopt_executable, start_date, end_date, tickers):
         tickers (str or list): e.g. "AAPL MSFT NVDA" or ["AAPL","MSFT","NVDA"]
 
     Returns:
-        df_results, df_allocations
+        mret (DataFrame): monthly returns
+        frontier (DataFrame): risk/return frontier
+        allocs (DataFrame): allocations by risk level
     """
     # Accept tickers as space-separated string or list
     if isinstance(tickers, str):
@@ -278,16 +287,16 @@ def run_portfolio_pipeline(ipopt_executable, start_date, end_date, tickers):
     else:
         tickers_list_local = list(tickers)
 
-    df_results, df_allocations = perform_full_portfolio_analysis(
+    mret, frontier, allocs = perform_full_portfolio_analysis(
         tickers_list_local, start_date, end_date, ipopt_executable
     )
 
-    if df_results is not None and df_allocations is not None:
+    if frontier is not None and allocs is not None:
         print("Final results and allocations obtained.")
-        display(df_results.head())
-        display(df_allocations.head())
+        display(frontier.head())
+        display(allocs.head())
 
-    return df_results, df_allocations
+    return mret, frontier, allocs
 
 
 # ------------------------------------------------------------
@@ -298,6 +307,6 @@ if __name__ == "__main__":
     ipopt_executable = "/content/bin/ipopt"  # adjust path if needed
 
     # Example: run on default tickers_list and date range
-    _df_results, _df_allocations = run_portfolio_pipeline(
+    _mret, _df_results, _df_allocations = run_portfolio_pipeline(
         ipopt_executable, start, end, tickers_list
     )
