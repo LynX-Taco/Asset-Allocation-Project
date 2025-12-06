@@ -1,7 +1,90 @@
+# ───────────────────────────────────────────────
+# Python cache & build artifacts
+# ───────────────────────────────────────────────
 __pycache__/
 *.pyc
-.venv/
-bin/
-outputs/
-.DS_Store
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+build/
+dist/
+
+# ───────────────────────────────────────────────
+# Jupyter / Colab / Notebook artifacts
+# ───────────────────────────────────────────────
 .ipynb_checkpoints/
+*.ipynb_save
+*.ipynb_checkpoint
+*.colab_backup
+
+# Colab runtime files
+*.swp
+*.swo
+
+# ───────────────────────────────────────────────
+# Virtual environments
+# ───────────────────────────────────────────────
+venv/
+.env/
+.env.bak/
+.venv/
+conda-env/
+.idea/
+.vscode/
+
+# ───────────────────────────────────────────────
+# Logs & temp output
+# ───────────────────────────────────────────────
+*.log
+*.tmp
+*.temp
+
+# ───────────────────────────────────────────────
+# Project output artifacts (V1 & V2 models)
+# ───────────────────────────────────────────────
+
+# V2 allocation + backtest outputs
+portfolio_pipeline/v2/outputs/
+!portfolio_pipeline/v2/outputs/.gitkeep
+
+# V1 plots
+efficient_frontier.png
+allocation_vs_risk.png
+
+# V2 BONMIN/Efficient Frontier images
+frontier_bonmin.png
+allocations_bonmin_frontier.png
+
+# Allocation CSVs
+allocations.csv
+allocations_bonmin.csv
+backtest_results.csv
+backtest_results_fallback.csv
+
+# ───────────────────────────────────────────────
+# Solver binaries (Bonmin, Ipopt, Cbc)
+# ───────────────────────────────────────────────
+# IDAES extensions downloaded in Colab
+idaes_bin/
+bin/
+solver/
+**/bonmin
+**/bonmin.exe
+**/ipopt
+**/ipopt.exe
+**/cbc
+**/cbc.exe
+
+# Do NOT track large binaries in repo
+*.dll
+*.so
+*.dylib
+*.exe
+
+# ───────────────────────────────────────────────
+# OS-specific junk
+# ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
