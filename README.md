@@ -77,3 +77,8 @@ save_v1_outputs(
     start="2022-01-01",
     end="2024-01-01"
 )
+
+```
+Run this 
+portfolio_pipeline/v1/outputs/v1_run_example/
+```
