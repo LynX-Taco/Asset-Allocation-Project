@@ -49,4 +49,31 @@ base_path = "/content/Asset-Allocation-Project"
 display(Image(f"{base_path}/efficient_frontier.png"))
 display(Image(f"{base_path}/allocation_vs_risk.png"))
 ```
+6) **Saving Output Files in Google Colab**
+```bash
+from portfolio_pipeline.v1.optimize_v1 import (
+    run_portfolio_pipeline,
+    save_v1_outputs,
+)
 
+ipopt = "/content/bin/ipopt"  # path to IPOPT from IDAES
+
+# 1) Run the optimization
+mret, frontier, allocs = run_portfolio_pipeline(
+    ipopt_executable=ipopt,
+    start_date="2022-01-01",
+    end_date="2024-01-01",
+    tickers="AAPL MSFT NVDA AMZN TSLA",
+)
+
+# 2) Save all results (plots + CSVs)
+save_v1_outputs(
+    tickers=["AAPL","MSFT","NVDA","AMZN","TSLA"],
+    df_monthly_returns=mret,
+    df_results=frontier,
+    df_allocations=allocs,
+    output_dir="portfolio_pipeline/v1/outputs/v1_run_example",
+    download_daily=True,
+    start="2022-01-01",
+    end="2024-01-01"
+)
