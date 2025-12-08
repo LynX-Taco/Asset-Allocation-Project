@@ -316,3 +316,142 @@ if __name__ == "__main__":
     _mret, _df_results, _df_allocations = run_portfolio_pipeline(
         ipopt_executable, start, end, tickers_list
     )
+
+
+# ---------------------------
+# Helper: save V1 outputs to disk (no changes to existing functions)
+# ---------------------------
+import shutil
+import pathlib
+import time
+
+def save_v1_outputs(tickers, df_monthly_returns, df_results, df_allocations, output_dir="portfolio_pipeline/v1/outputs/v1_run_example", download_daily=True, start=None, end=None):
+    """
+    Save V1 pipeline outputs to a single folder.
+
+    Args:
+      tickers: list of tickers used (or str)
+      df_monthly_returns: DataFrame returned by calculate_monthly_returns(...)
+      df_results: DataFrame returned by optimize_and_plot_portfolio(...) (frontier)
+      df_allocations: DataFrame returned by optimize_and_plot_portfolio(...) (allocations)
+      output_dir: directory to write CSVs and images into
+      download_daily: if True, re-download daily Close prices and save them
+      start, end: optional date strings used for download (if download_daily True)
+    """
+    out = pathlib.Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+
+    # 1) Save monthly returns (we already have it)
+    try:
+        if df_monthly_returns is not None:
+            df_monthly_returns.to_csv(out / "monthly_returns.csv", index=True)
+            print("Saved monthly_returns.csv")
+    except Exception as e:
+        print("Could not save monthly_returns.csv:", e)
+
+    # 2) Optionally re-download daily Close prices and save
+    if download_daily:
+        try:
+            import yfinance as yf
+            tickers_list = tickers if isinstance(tickers, (list, tuple)) else [t.strip() for t in str(tickers).split()]
+            price_frames = []
+            for t in tickers_list:
+                try:
+                    df_daily = yf.download(t, start=start, end=end, progress=False, auto_adjust=False)
+                    if not df_daily.empty and "Close" in df_daily.columns:
+                        df_close = df_daily["Close"].rename(t)
+                        price_frames.append(df_close)
+                        # small sleep to be polite
+                        time.sleep(0.1)
+                except Exception as ex:
+                    print(f"Warning: failed to download daily {t}: {ex}")
+
+            if price_frames:
+                daily_prices_df = pd.concat(price_frames, axis=1).sort_index()
+                daily_prices_df.to_csv(out / "price_data_daily.csv")
+                daily_returns_df = daily_prices_df.pct_change().dropna()
+                daily_returns_df.to_csv(out / "daily_returns.csv")
+                print("Saved daily price CSVs (price_data_daily.csv, daily_returns.csv)")
+            else:
+                print("No daily price frames downloaded; skipping daily CSVs.")
+        except Exception as e:
+            print("Could not download/save daily prices:", e)
+
+    # 3) Save frontier and allocations as CSVs
+    try:
+        if df_results is not None:
+            df_results.to_csv(out / "efficient_frontier.csv", index=False)
+            print("Saved efficient_frontier.csv")
+    except Exception as e:
+        print("Could not save efficient_frontier.csv:", e)
+
+    try:
+        if df_allocations is not None:
+            # if df_allocations has index = risk levels, preserve it
+            df_allocations.to_csv(out / "allocations_by_risk.csv", index=True)
+            print("Saved allocations_by_risk.csv")
+    except Exception as e:
+        print("Could not save allocations_by_risk.csv:", e)
+
+    # 4) Move or copy generated plot files if they were saved to CWD
+    #    Your functions save 'efficient_frontier.png' and 'allocation_vs_risk.png' in cwd.
+    possible_plots = {
+        "efficient_frontier.png": out / "efficient_frontier.png",
+        "allocation_vs_risk.png": out / "allocation_vs_risk.png",
+    }
+    for src_name, dest_path in possible_plots.items():
+        src = pathlib.Path(src_name)
+        if src.exists():
+            try:
+                # copy rather than move so original remains for interactive view
+                shutil.copy2(src, dest_path)
+                print(f"Copied {src_name} -> {dest_path}")
+            except Exception as e:
+                print(f"Could not copy {src_name}: {e}")
+        else:
+            # if original plot not found, try to recreate from data
+            print(f"{src_name} not found in CWD; attempting to replot from data...")
+
+            try:
+                if src_name == "efficient_frontier.png" and df_results is not None:
+                    plt.figure(figsize=(10,6))
+                    plt.plot(df_results["Risk"], df_results["Return"], marker="o", linestyle="-")
+                    plt.title("Efficient Frontier")
+                    plt.xlabel("Portfolio Risk (Variance)")
+                    plt.ylabel("Expected Return")
+                    plt.grid(True)
+                    plt.tight_layout()
+                    plt.savefig(dest_path, dpi=300, bbox_inches="tight")
+                    plt.close()
+                    print(f"Re-saved {dest_path} from df_results")
+                elif src_name == "allocation_vs_risk.png" and df_allocations is not None:
+                    plt.figure(figsize=(12,6))
+                    # df_allocations expected to have a 'Risk' column or index
+                    if "Risk" in df_allocations.columns:
+                        x = df_allocations["Risk"]
+                    else:
+                        x = df_allocations.index
+                    for col in [c for c in df_allocations.columns if c != "Risk"]:
+                        plt.plot(x, df_allocations[col], marker="o", markersize=4, label=str(col))
+                    plt.title("Asset Allocation as a Function of Portfolio Risk")
+                    plt.xlabel("Portfolio Risk (Variance)")
+                    plt.ylabel("Proportion Invested")
+                    plt.legend(title="Asset", bbox_to_anchor=(1.05, 1), loc="upper left")
+                    plt.grid(True)
+                    plt.tight_layout()
+                    plt.savefig(dest_path, dpi=300, bbox_inches="tight")
+                    plt.close()
+                    print(f"Re-saved {dest_path} from df_allocations")
+                else:
+                    print(f"Insufficient data to replot {src_name}.")
+            except Exception as e:
+                print(f"Failed to replot {src_name}: {e}")
+
+    print(f"\nAll artifacts attempted to be saved in: {out.resolve()}")
+    print("List of files in output dir:")
+    try:
+        for p in sorted(out.iterdir()):
+            print(" -", p.name)
+    except Exception:
+        pass
+
